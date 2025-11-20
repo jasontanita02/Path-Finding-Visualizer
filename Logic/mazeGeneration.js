@@ -12,15 +12,11 @@ function generateMaze(col, row){
     }
     return maze
 }
-const maze = generateMaze(2,3);
+const maze = generateMaze(4,4);
 
-console.log("Before traversal\n")
-for (let i = 0; i < maze.length; i++){
-    console.log(maze[i]);
-}
 
-function traverseMaze(maze, row, col, maxCol, maxRow){
-    // console.log(maxCol, maxRow)
+
+function traverseMaze(maze, row, col, maxCol, maxRow, graph = new Map()){
     //Calculate the neighbors
     let N = row - 1;
     let E = col + 1;
@@ -28,15 +24,23 @@ function traverseMaze(maze, row, col, maxCol, maxRow){
     let W = col - 1; 
     let numberLetter = {"N": N, "E": E, "S": S, "W": W};
     let neighbors = ["N", "E", "S", "W"];
-    let randomDirections = (neighbors);
+    let randomDirections = shuffle(neighbors);
 
     //Iterate through the neighbors
     
     //Visited
     maze[row][col] = 1;
+    
+    let x = [row,col];
+    // if (graph.has(x) == true){
+    //     console.log(graph);
+    // }
+    graph.set(x, []);
+    
+    // console.log(graph);
 
     for (let i = 0; i < randomDirections.length; i++){
-        console.log(i)
+        // console.log(i)
         let direction = randomDirections[i];
     
 
@@ -51,9 +55,14 @@ function traverseMaze(maze, row, col, maxCol, maxRow){
             if (maze[newRow][col] == 1){
                 continue;
             }
-            console.log("Direction: ", direction, "row: ", row, "col: ", col);
+
             // If we made it here its in bounds and hasn't been visited
-            traverseMaze(maze, newRow, col, maxCol, maxRow);
+            //Add that connection
+            graph.get(x).push([newRow,col]);
+            console.log(graph);
+
+            
+            traverseMaze(maze, newRow, col, maxCol, maxRow, graph);
         }
         if (["W", "E"].includes(direction)){
             //Check if its in bound
@@ -66,22 +75,16 @@ function traverseMaze(maze, row, col, maxCol, maxRow){
             if (maze[row][newCol] == 1){
                 continue;
             }
-            console.log("Direction: ", direction, "row: ", row, "col: ", col);
             // If we made it here its in bounds and hasn't been visited
-            traverseMaze(maze, row, newCol, maxCol, maxRow);
+
+            graph.get(x).push([row,newCol]);
+
+            console.log(graph);
+            traverseMaze(maze, row, newCol, maxCol, maxRow, graph);
         }
     }
 }
  
-// console.log("Maze Row #: ", maze.length, "Maze Column #: ", maze[0].length)
 traverseMaze(maze, 0, 0, maze[0].length, maze.length);
 
 
-console.log("After traversal\n")
-for (let i = 0; i < maze.length; i++){
-    console.log(maze[i]);
-}
-
-//Testing 123
-
-//comment

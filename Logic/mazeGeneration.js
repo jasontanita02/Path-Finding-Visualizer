@@ -12,7 +12,7 @@ function generateMaze(col, row){
     }
     return maze
 }
-const maze = generateMaze(2,2);
+const maze = generateMaze(3,3);
 
 let graph = new Map();
 
@@ -32,7 +32,10 @@ function traverseMaze(maze, row, col, maxCol, maxRow, graph = new Map()){
     maze[row][col] = 1;
     
     let x = `[${row},${col}]`;
-    graph.set(x, []);
+    if (graph.has(x) == false){
+        graph.set(x, []);
+    }
+    
     
     // console.log(graph);
 
@@ -55,7 +58,15 @@ function traverseMaze(maze, row, col, maxCol, maxRow, graph = new Map()){
 
             // If we made it here its in bounds and hasn't been visited
             //Add that connection
-            graph.get(x).push(`[${newRow},${col}]`);
+            let y = `[${newRow},${col}]`;
+            // If the current cell doesnt have the y neighbor include it
+            if (graph.get(x).includes(y) == false){
+                graph.get(x).push(y);
+            }
+            if (graph.has(y) == false){
+                graph.set(y, [x])
+            }
+
             // console.log(graph);
 
             
@@ -74,8 +85,13 @@ function traverseMaze(maze, row, col, maxCol, maxRow, graph = new Map()){
             }
             // If we made it here its in bounds and hasn't been visited
             
-            
-            graph.get(x).push(`[${row},${newCol}]`);
+            let y = `[${row},${newCol}]`
+            if (graph.get(x).includes(y) == false){
+                graph.get(x).push(y);
+            }
+            if (graph.has(y) == false){
+                graph.set(y, [x])
+            }
 
             traverseMaze(maze, row, newCol, maxCol, maxRow, graph);
         }
@@ -85,26 +101,12 @@ function traverseMaze(maze, row, col, maxCol, maxRow, graph = new Map()){
 traverseMaze(maze, 0, 0, maze[0].length, maze.length, graph);
 
 
-console.log("After everything");
-// console.log(graph);
+console.log(graph);
 
-graph.get("[0,0]").push("[1,0]");
-graph.get("[0,0]").push("[1,1]");
 
-console.log(graph)
+dfs(graph, "[0,0]", "[1,1]");
 
-for (let i = 0; i < graph.get("[0,0]").length; i++){
-    let x = graph.get("[0,0]")[i];
-    console.log(x);
-    console.log(graph.get(x))
+
+function random(maze){
+
 }
-console.log(graph.get("[0,0]").length);
-console.log(graph.get("[0,0]"));
-
-
-console.log(graph.get("0,0"));
-
-
-
-// dfs(graph, [0,0], "hello");
-//TODO make bidirectional in graph. Easy fix.

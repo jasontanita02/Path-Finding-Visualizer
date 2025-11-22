@@ -12,7 +12,7 @@ function generateMaze(col, row){
     }
     return maze
 }
-const maze = generateMaze(3,3);
+const maze = generateMaze(7,7);
 
 let graph = new Map();
 
@@ -36,11 +36,7 @@ function traverseMaze(maze, row, col, maxCol, maxRow, graph = new Map()){
         graph.set(x, []);
     }
     
-    
-    // console.log(graph);
-
     for (let i = 0; i < randomDirections.length; i++){
-        // console.log(i)
         let direction = randomDirections[i];
     
 
@@ -66,8 +62,6 @@ function traverseMaze(maze, row, col, maxCol, maxRow, graph = new Map()){
             if (graph.has(y) == false){
                 graph.set(y, [x])
             }
-
-            // console.log(graph);
 
             
             traverseMaze(maze, newRow, col, maxCol, maxRow, graph);
@@ -100,13 +94,30 @@ function traverseMaze(maze, row, col, maxCol, maxRow, graph = new Map()){
  
 traverseMaze(maze, 0, 0, maze[0].length, maze.length, graph);
 
-
-console.log(graph);
-
-
-dfs(graph, "[0,0]", "[1,1]");
+let coords = randomStart(maze);
 
 
-function random(maze){
 
+
+dfs(graph, `[${coords[0]}]`, `[${coords[1]}]`);
+
+
+function getRandomIntInclusive(max) {
+    return Math.floor(Math.random() * max);
 }
+
+
+
+function randomStart(maze){
+    let row = maze.length;
+    let col = maze[0].length;
+
+    let randRow = getRandomIntInclusive(row);
+    let randRow2 = getRandomIntInclusive(row);
+
+    let col1 = 0;
+    let col2 = col - 1;
+    return [`${randRow},${col1}`, `${randRow2},${col2}`];
+}
+
+

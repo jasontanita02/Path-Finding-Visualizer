@@ -1,18 +1,18 @@
-export default function DFS(graph, node, end){
+export default function DFS(graph, node, end, maze){
     let visited = new Set();
     let stack = [node];
     let parent = {};
-    console.log("graph: \n", graph)
-    // console.log("stack: ", stack)
+    // console.log(graph)
+
+    let path = []
 
 
     while(stack.length > 0){
         let current = stack.pop();
         if (current == end){
             console.log("Found the path!");
-            console.log("current :", current, "end: ", end)
             while(parent[current] != undefined){
-                console.log("parent: ", parent[current]);
+                path.push(current)
                 current = parent[current];
             } 
             break;
